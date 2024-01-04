@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
+
+    <!----------------------------------------------- CSS----------------------------  -->
+
+<style>
+
+    *,*::before,*::after{
+      margin:0;
+      padding:0;
+      box-sizing: border-box;
+      font-family: initial;
+   }
+  
+  :root {
+      --colorDark1: #112D4E;
+      --colorDark2: #3F72AF;
+      --colorLight1: #DBE2EF;
+      --colorLight2: #F9F7F7;
+   }
+  
+  .wrapper{
+       
+      width:100vw;
+      height:100vh;
+      background-image: linear-gradient(160deg,#112d4e 0%, #3f72af 100%);
+      background-color: #112d4e;
+      color: var(--colorLight2)
+  }
+  
+  h1{
+      text-align: center;
+      text-transform: uppercase;
+      color: white;
+      padding-top:20px ;
+      font-family: "Trirong", serif;
+  }
+  
+  .tab-containner{
+      max-width:550px;
+      margin:0 auto;
+      margin-top:4rem;
+      display: flex;
+      justify-content: space-between;
+  }
+  
+  .tab{
+      cursor: pointer;
+      font-size: 0.875rem;
+      letter-spacing: 1.75px;
+      padding:5px 8px;
+      font-family: "Trirong", serif;
+      color: white;
+      
+  }
+  
+  .tab.current-tab{
+      background-color:rgba(219,226,239,0.5);
+      border-radius:10px;
+  
+  }
+  
+  .weather-containner{
+      
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-block: 4rem;
+      
+  
+  }
+  
+  @media (max-width: 768px) {
+      h1 {
+          font-size: 1.75rem;
+      }
+  
+      .tab-container {
+          margin-top: 2rem;
+          width: 80%;
+      }
+  
+      .tab {
+          font-size: 0.75rem;
+      }
+  }
+  
+  .btn{
+      all:unset;
+      font-size:0.85rem;
+      text-transform: uppercase;
+      border-radius: 5px;
+      background-color: var(--colorDark2);
+      cursor: pointer;
+      padding: 10px 30px;
+      /* margin-bottom: 10px; */
+  }
+  
+  
+  .sub-container{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+  }
+  
+  .grant-location-containner{
+      display:none;
+  }
+  
+  .grant-location-containner.active{
+      display:flex;
+  }
+  
+  .grant-location-containner img{
+      margin-bottom: 2rem;
+  }
+  
+  .grant-location-containner p:first-of-type{
+      font-size: 1.75rem;
+      font-weight: 600;
+  }
+  
+  .ga{
+      font-family: "Trirong", serif;
+      color: white;;
+  }
+  
+  .grant-location-containner p:last-of-type{
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-top:0.75rem;
+      margin-bottom: 1.75rem;
+      font-family: "Trirong", serif;
+      color: white;
+      left: 0.75px;
+  
+  }
+  
+  .loading-container{
+      display:none;
+  
+  }
+  
+  .loading-container.active{
+      display: flex;
+  
+  }
+  
+  .loading-container p{
+      text-transform: uppercase;
+  }
+  
+  .user-info-container{
+      display: none;
+  
+  }
+  
+  .user-info-container.active{
+      display: flex; 
+  }
+  
+  .name{
+      display: flex;
+      align-items: center;
+      gap:0 0.5rem;
+      margin-bottom: 1rem;
+  
+  }
+  
+  .user-info-container p{
+      font-size: 1.5rem;
+      font-weight:200;
+  
+  }
+  
+  .user-info-container img{
+      width:90px;
+      height:90px;
+  }
+  
+  .name p{
+      font-size:2rem;
+  
+  }
+  
+  .name img{
+      width:30px;
+      height: 30px;
+      object-fit: contain;
+  }
+  
+  .user-info-container p[data-temp]{
+      font-size: 2.75rem;
+      font-weight: 700;
+  }
+  
+  .parameter-container{
+      display: flex;
+      gap:10px 20px;
+      justify-content: center;
+      margin-top:2rem;
+      align-items: center;
+  }
+  
+  /*.parameter{ 
+      width:30px;
+      max-width: 200px;
+      background-color: rgba(219,226,239,0.5);
+      border-radius: 5px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px 0;
+     
+     
+      
+  }*/
+  
+  .parameter img{
+      width: 80px;
+      height: 50;
+  
+  
+  }
+  
+  .parameter p:first-of-type{
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-transform: uppercase;
+  }
+  
+  .parameter p:last-of-type{
+      font-size:1rem;
+      font-weight: 200;
+  }
+  
+  @media (max-width: 768px) {
+      .parameter-container {
+          flex-direction: column;
+          align-items: center;
+      }
+  
+      .parameter {
+          width: 100%;
+      }
+  }
+  
+  .form-container{
+      display: none;
+      width: 90%;
+      max-width: 550px;
+      margin: 0 auto;
+      justify-content: center;
+      align-items: center;
+      gap:0 10px;
+      margin-bottom: 3rem;
+  
+  }
+  
+  .form-container.active{
+      display: flex;
+  }
+  
+  .form-container input{
+      all:unset;
+      width: calc(100% - 80px);
+      height: 40px;
+      padding: 0 20;
+      background-color: rgba(219,226,239,0.5);
+      border-radius:10px;
+  }
+  
+  .form-container input::placeholder{
+      color: rgba(255,255,255,0.7);
+  
+  }
+  
+  .form-container input:focus{
+      outline: 3px solid rgba(255,255,255,0.7);
+  }
+  
+  .form-container .btn{
+      padding: unset;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+  
+  }
+  
+</style>
+</head>
+<body>
+
+   <div class="wrapper">
+     <h1>Weather App</h1>
+ 
+     <div class="tab-containner">
+         <p class="tab" data-userWeather>Your Location</p>
+         <p class="tab" data-searchWeather>Search Weather</p>
+     </div>
+ 
+     <div class="weather-containner">
+         <!--grant location-->
+ 
+         <div class=" sub-container grant-location-containner">
+             <img src="./image/location.png" alt="" width="80" height="80" loading="lazy">
+ 
+             <p class="ga">Grant Location Access</p>
+             <p>Allow Access to get weather Information</p>
+ 
+             <button class="btn" data-grantAccess>Grant Access</button>
+ 
+         </div>
+
+         <!--Search  form -->
+
+         <form class="form-container" data-searchForm>
+            <input placeholder="Search for city..." data-searchInput>
+            <button class="btn">
+                <img src="./image/search (1).png" width="20" height="20" loading="lazy">
+            </button>
+         </form>
+
+         <!--loading screen container-->
+
+         <div class="sub-container loading-container">
+            <img src="./image/loadinggif.gif" width="80" height="80">
+            <p>Loading</p>
+         </div>
+
+
+         <!--Show weather info-->
+
+         <div class="sub-container user-info-container">
+
+            <!--city name and flag -->
+            <div class="name">
+                <p data-cityName></p>
+                <img data-countryIcon>
+
+            </div>
+
+            <!--weather dicription-->
+
+            <p data-weatherdesc></p>
+
+            <!--weather icon-->
+
+            <img data-weatherIcon>
+
+            <!--temperature-->
+
+            <p data-temp></p>
+
+            <!--3 card paramerer-->
+            <div class="parameter-container">
+                <!-- card 1-->
+
+                <div class="parameter">
+                    <img src="./image/wind.png" width="80" height="80">
+                    <p>Windspeed</p>
+                    <p data-windspeed></p>
+                </div>
+
+
+                  <!-- card 2-->
+
+                <div class="parameter">
+                    <img src="./image/humidity1.png" width="80" height="80">
+                    <p>humidity</p>
+                    <p data-humidity></p>
+                </div>
+
+                  <!-- card 3-->
+
+                <div class="parameter">
+                    <img src="./image/cloud (1).png" width="80" height="80">
+                    <p>clouds</p>
+                    <p data-cloudiness></p>
+                </div>
+            </div>
+
+
+
+         </div>
+
+
+ 
+     </div>
+   </div>
+
+   <!-------------------------------------JS----------------------------------------------------->
+
+<script src="./index.js">
+
+        
+  const userTab = document.querySelector("[data-userWeather]");
+  const searchTab = document.querySelector("[data-searchWeather]");
+  const userContainer = document.querySelector(".weather-containner");
+  
+  const grantAccessContainner = document.querySelector(".grant-location-containner");
+  const searchForm = document.querySelector("[data-searchForm]");
+  const searchInp = document.querySelector("[data-searchInput]");
+  const loadingScreen = document.querySelector(".loading-container");
+  const userInfoContainer = document.querySelector(".user-info-container");
+  
+  // initially variable
+  
+  let currentTab = userTab;
+  const API_KEY = "0026ed608193492086c62012d5aaaa12";
+  
+  currentTab.classList.add("current-tab");
+  getfromSessionStorage();
+  
+  
+  function switchTab(clickedTab){
+      if(clickedTab !== currentTab){
+          currentTab.classList.remove("current-tab");
+          currentTab = clickedTab;
+          currentTab.classList.add("current-tab");
+  
+          if(!searchForm.classList.contains("active")){
+              userInfoContainer.classList.remove("active");
+              grantAccessContainner.classList.remove("active");
+              searchForm.classList.add("active");
+  
+          }
+          else{
+              searchForm.classList.remove("active");
+              userInfoContainer.classList.remove("active");
+              getfromSessionStorage();
+  
+          }
+      }
+  }
+  
+  userTab.addEventListener("click",() => {
+      switchTab(userTab);
+  
+  });
+  
+  searchTab.addEventListener("click",() => {
+      switchTab(searchTab);
+  
+  });
+  
+  function getfromSessionStorage(){
+      const localCoordinates = sessionStorage.getItem("user-coordinates");
+      if(!localCoordinates){
+          grantAccessContainner.classList.add("active");
+      }
+      else{
+          const coordinates = JSON.parse(localCoordinates);
+          fetchUserWeatherInfo(coordinates);
+      }
+  }
+  
+  async function fetchUserWeatherInfo(coordinates){
+      const { lat, lon } = coordinates;
+      grantAccessContainner.classList.remove("active");
+      loadingScreen.classList.add("active");
+  
+      // API call
+  
+      try{
+          const response = await fetch (`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+  
+          const data = await response.json();
+  
+          loadingScreen.classList.remove("active");
+          userInfoContainer.classList.add("active");
+          renderWeatherInfo(data);
+  
+      }
+      catch(err){
+          loadingScreen.classList.remove("active");
+      }
+  
+  }
+  
+  function renderWeatherInfo(weatherInfo){
+      // we have to fetch the element
+  
+      const cityName = document.querySelector("[data-cityName]");
+      const countryIcon = document.querySelector("[data-countryIcon]");
+      const desc = document.querySelector("[data-weatherDesc]");
+      const weatherIcon = document.querySelector("[data-weatherIcon]");
+      const temp = document.querySelector("[data-temp]");
+      const windspeed = document.querySelector("[data-windspeed]");
+      const humidity = document.querySelector("[data-humidity]");
+      const cloudiness = document.querySelector("[data-cloudiness]");
+  
+      // fetch values from weatherInfo object and put it UI elements
+  
+      cityName.innerText = weatherInfo?.name;
+  
+      countryIcon.src = `https://flagcdn.com/144x108/${weatherInfo?.sys?.country.toLowerCase()}.png`;
+     
+  
+      desc.innerText = weatherInfo?.weather?.[0]?.description;
+  
+      weatherIcon.src = `http://openweathermap.org/img/w/${weatherInfo?.weather?.[0]?.icon}.png`;
+  
+      temp.innerText = `${weatherInfo?.main?.temp} °C`;
+  
+      windspeed.innerText = `${weatherInfo?.wind?.speed.toFixed(2)} m/s`;
+      windspeed.innerText = `${weatherInfo?.wind?.speed.toFixed(2)} m/s`;
+  
+      humidity.innerText = `${weatherInfo?.main?.humidity} %`;
+  
+      cloudiness.innerText = `${weatherInfo?.clouds?.all} %`;
+  
+  }
+  
+  
+  
+  function getLocation(){
+      if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(showPosition);
+      }
+      else{
+  
+      }
+  }
+  
+  function showPosition(position){
+      const userCoordinates = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+      }
+  
+      sessionStorage.setItem("user-coordinates",JSON.stringify(userCoordinates));
+      fetchUserWeatherInfo(userCoordinates);
+  
+  }
+  
+  const grantAccessbutton = document.querySelector("[data-grantAccess]");
+  grantAccessbutton.addEventListener("click", getLocation);
+  
+  const searchInput = document.querySelector("[data-searchInput]");
+  
+  searchForm.addEventListener("submit",(e) => {
+      e.preventDefault();
+      let cityName = searchInput.value;
+  
+      if(cityName === "")
+          return;
+      else
+          fetchSearchWeatherInfo(cityName);
+  });
+  
+  async function fetchSearchWeatherInfo(city){
+      loadingScreen.classList.add("active");
+      userInfoContainer.classList.remove("active");
+      grantAccessContainner.classList.remove("active");
+  
+      try{
+          const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+      
+          const data = await response.json();
+          loadingScreen.classList.remove("active");
+          userInfoContainer.classList.add("active");
+          renderWeatherInfo(data);
+      }
+      catch(err){
+  
+      }
+  }
+
+
+
+
+ ////////////////////////////// ANOTHER API FETCH ////////////////////////////////////////////
+
+</script>
+
+    
+    
+</body>
+</html>
